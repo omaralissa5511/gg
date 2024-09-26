@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('offers', function (Blueprint $table) {
+            $table->id();
+            $table->Integer('offer_value');
+            $table->text('description')->nullable();
+            $table->date('begin');
+            $table->date('end');
+            $table->unsignedBigInteger('health_care_id');
+            $table->foreign('health_care_id')->references('id')
+                ->on('health_cares')->onDelete('cascade')->onUpdate('cascade');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('offers');
+    }
+};
