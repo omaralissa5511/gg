@@ -53,8 +53,6 @@ class ClassController extends Controller
             'course' => $clas,
             'status' => true
         ];
-          $message = 'one class have been added';
-        broadcast(new \App\Events\Clas($message));
 
         return response()->json($response);
 
@@ -75,8 +73,7 @@ class ClassController extends Controller
             'course' => $clas,
             'status' => true
         ];
-         $message = 'one class have been updated';
-        broadcast(new \App\Events\Clas($message));
+
         return response()->json($response);
 
     }
@@ -120,39 +117,16 @@ class ClassController extends Controller
                 'message' => 'the class was removed successfully.',
                 'status' => true
             ];
-   $message = 'one class have been deleted';
-        broadcast(new \App\Events\Clas($message));
+
             return $response;}
         else {
             $response = [
                 'message' => 'class does not exist.',
                 'status' => false
             ];
-             
             return $response;
         }
 
     }
-      public function getCourse_NONavailable_time ($course_id){
-
-        $classes = Clas::where('course_id',$course_id)->get(['start','end']);
-        if($classes){
-
-            $response = [
-                'message' => 'classes found : ',
-                'classes' => $classes,
-                'status' => true
-            ];
-            return $response;
-        } else{
-            $response = [
-                'message' => 'no classes for you.',
-                'status' => false
-            ];
-            return $response;
-        }
-
-    }
-
 
 }

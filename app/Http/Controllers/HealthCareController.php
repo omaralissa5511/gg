@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\HealthCare;
-use App\Events\Health;
 use App\Models\User;
 use Carbon\Carbon;
-use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
 
 class HealthCareController extends Controller
 {
@@ -35,8 +32,7 @@ class HealthCareController extends Controller
                 'status' => false
             ]);
         }
-     
-         $healthCare->user=$healthCare->user;
+        $healthCare->user=$healthCare->user;
         $healthCare->day = json_decode($healthCare->day);
         $healthCare->day = explode(',', $healthCare->day[0]);
         $healthCare->start=Carbon::parse($healthCare->start)->format('H:i');
@@ -46,8 +42,7 @@ class HealthCareController extends Controller
             'status' => true
         ]);
     }
-    
-    
+
     public function myHealth(){
         $id = Auth::id();
         $healthCare = HealthCare::where('user_id',$id)->first();
@@ -82,7 +77,7 @@ class HealthCareController extends Controller
             'lat' => 'required',
             'long' => 'required',
             'address' => 'required',
-            'days' => 'required',
+            'day' => 'required',
             'start' => 'required',
             'end' => 'required'
         ]);
@@ -136,8 +131,12 @@ class HealthCareController extends Controller
         $data['user'] = $user;
         $data['health_care'] = $healthCare;
         $user->assignRole('HEALTH');
-         $message = 'healthcare is added successfully.';
-        broadcast(new Health($message));
+
+        $user2=User::where('type','profile')->get('id');
+        foreach ($user2 as $user){
+            $notificationService = new \App\Services\Api\NotificationService();
+            $notificationService->send($user, 'A Health Care added ', $healthCare->name . ' is added');
+        }
 
         return response()->json([
             'message' => 'User is created successfully.',
@@ -192,8 +191,6 @@ class HealthCareController extends Controller
         $healthCare->update($requestData);
 
         $data['user']= $healthCare->user;
-         $message = 'healthcare is updated successfully.';
-        broadcast(new Health($message));
 
         return response()->json([
             'message' => 'Health Care is updated successfully.',
@@ -208,8 +205,6 @@ class HealthCareController extends Controller
         $user = User::where('id',$healthCare->user_id)->first();
         if($user) {
             $user->delete();
-             $message = 'healthcare is deleted successfully.';
-        broadcast(new Health($message));
             return response()->json([
                 'message' => 'Health Care was removed successfully.',
                 'status' => true
@@ -247,16 +242,5 @@ class HealthCareController extends Controller
                 'status' => true
             ]);
         }
-    }
-    
-    
-    public function health_care_that_made_offer(){
- $today = Carbon::now();
-        $oofer = Offer::where('end','>=',$today)->pluck('health_care_id');
-        $collection = collect($oofer);
-        $oofer  = $collection->unique();
-        $data['health_care'] = $oofer;
-
-        return $data;
     }
 }
