@@ -111,7 +111,7 @@ class CRatingController extends Controller
             'rating' => $request->rating,
             'review' => $request->review
         ]);
-        
+
         $message = 'new Rating have added successfully.';
         Broadcast(new \App\Events\CRating($message));
 
@@ -160,10 +160,8 @@ class CRatingController extends Controller
             'rating' =>$request->rating,
             'review' =>$request->review
         ]);
-        
         $message = 'A rating is updated';
         Broadcast(new \App\Events\CRating($message));
-
 
         return response()->json([
             'message' => 'Rating is updated successfully.',
@@ -203,7 +201,7 @@ class CRatingController extends Controller
         }
 
         $rating->delete();
-        
+
         $message = 'A Rating is deleted';
         Broadcast(new \App\Events\CRating($message));
 

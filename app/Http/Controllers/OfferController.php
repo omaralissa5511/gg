@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Offer;
-use App\Events\Offers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -50,8 +49,6 @@ class OfferController extends Controller
             'begin'=> $request->begin,
             'end'=> $request->end,
         ]);
-        $message = 'offer is created successfully.';
-        broadcast(new Offers($message));
 
         return response()->json([
             'message' => 'Offer created successfully.',
@@ -72,8 +69,7 @@ class OfferController extends Controller
         }
 
         $offer->delete();
-$message = 'offer is deleted successfully.';
-        broadcast(new Offers($message));
+
         return response()->json([
             'message' => 'Offer deleted successfully.',
             'status' => true

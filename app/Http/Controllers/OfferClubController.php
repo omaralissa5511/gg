@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Events\ClubOffers;
+
 use App\Models\CLUB\OfferClub;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -49,8 +49,6 @@ class OfferClubController extends Controller
             'begin'=> $request->begin,
             'end'=> $request->end,
         ]);
-         $message = 'offer is added successfully.';
-        broadcast(new ClubOffers($message));
 
         return response()->json([
             'message' => 'Offer created successfully.',
@@ -71,8 +69,7 @@ class OfferClubController extends Controller
         }
 
         $offer->delete();
- $message = 'offer is deleted successfully.';
-        broadcast(new ClubOffers($message));
+
         return response()->json([
             'message' => 'Offer deleted successfully.',
             'status' => true

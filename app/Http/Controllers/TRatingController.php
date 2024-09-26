@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\CLUB\Booking;
-use App\Events\TRaiting;
 use App\Models\CLUB\TRating;
 use App\Models\CLUB\Reservation;
 use Carbon\Carbon;
@@ -107,8 +106,6 @@ class TRatingController extends Controller
             'rating' => $request->rating,
             'review' => $request->review
         ]);
-         $message = 'rating is added successfully.';
-        broadcast(new TRaiting($message));
 
         return response()->json([
             'message' => 'Rating is created successfully.',
@@ -155,8 +152,6 @@ class TRatingController extends Controller
             'rating' =>$request->rating,
             'review' =>$request->review
         ]);
-         $message = 'rating is updated successfully.';
-        broadcast(new TRaiting($message));
 
         return response()->json([
             'message' => 'Rating is updated successfully.',
@@ -196,8 +191,6 @@ class TRatingController extends Controller
         }
 
         $rating->delete();
-         $message = 'rating is deleted successfully.';
-        broadcast(new TRaiting($message));
 
         return response()->json([
             'message' => 'Rating is deleted successfully.',
